@@ -17,6 +17,7 @@ class PersonalOntology:
         return {}
 
     def save(self):
+        self.path.parent.mkdir(parents=True, exist_ok=True)
         data = {k: vars(v) for k, v in self.entities.items()}
         self.path.write_text(json.dumps(data, indent=2))
 

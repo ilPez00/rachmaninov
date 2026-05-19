@@ -1,6 +1,6 @@
 from enum import Enum
 from dataclasses import dataclass, field
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Any
 
 class ScoreAxis(Enum):
     PHYSICAL = "physical"
@@ -57,3 +57,19 @@ class WikiPage:
     content: str
     frontmatter: Dict[str, Any] = field(default_factory=dict)
     project: str = "default"
+
+@dataclass
+class ExperienceLog:
+    desire: str
+    intent: str = ""
+    method: str = ""
+    action: str = ""
+    effectSummary: str = ""
+    effectDetails: str = ""
+    outcome: str = ""
+    relatedResources: List[str] = field(default_factory=list)
+    symbolicAssociations: Dict[str, str] = field(default_factory=dict)
+    physicalScore: float = 0.0
+    economicScore: float = 0.0
+    intellectualScore: float = 0.0
+    psychologicalScore: float = 0.0
