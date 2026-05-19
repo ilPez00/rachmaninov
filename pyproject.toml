@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rachmaninov-core"
+version = "0.1.0"
+description = "Standalone action-proposal and PDCA engine based on Praxis ontology."
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    # No external deps yet, interfaces with 'opencode' CLI
+]
+
+[project.scripts]
+rachmaninov = "rachmaninov.cli:main"

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "learn-rust",
+    "name": "Master Rust Programming",
+    "domain": "Career & Craft",
+    "progress": 0.35
+  },
+  {
+    "id": "run-marathon",
+    "name": "Train for Rome Marathon",
+    "domain": "Body & Fitness",
+    "progress": 0.12
+  },
+  {
+    "id": "stoic-journal",
+    "name": "Daily Stoic Reflection",
+    "domain": "Mental Balance",
+    "progress": 0.85
+  }
+]
