@@ -32,3 +32,17 @@ class PersonalOntology:
         if name not in self.entities:
             self.entities[name] = PersonalEntity(name, category, description)
             self.save()
+
+    def learn_from_context(self, text: str):
+        """Automatically detect potential new entities in text."""
+        import re
+        # Detect CapitalizedWords that aren't common English (primitive symbol detection)
+        words = re.findall(r'\b[A-Z][a-z0-9]+(?:[A-Z][a-z0-9]+)*\b', text)
+        
+        common_ignores = {"Aura", "Praxis", "Rachmaninov", "User", "The", "Monday", "Today"}
+        
+        for word in words:
+            if word not in common_ignores and word not in self.entities:
+                # Default to Concept or Project based on length/suffix
+                category = "Project" if len(word) > 5 else "Concept"
+                self.learn_entity(word, category, f"Auto-detected from context: {text[:50]}...")

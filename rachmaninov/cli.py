@@ -42,6 +42,10 @@ def wiki_ingest_cmd(args):
     wiki.ingest(page)
     print("Ingested into UberWiki.")
 
+def mcp_serve(args):
+    from .mcp import mcp
+    mcp.run()
+
 def main():
     parser = argparse.ArgumentParser(description="Rachmaninov Standalone Tool")
     subparsers = parser.add_subparsers(dest="command")
@@ -74,6 +78,9 @@ def main():
     p_wiki.add_argument("--content", required=True)
     p_wiki.add_argument("--project", default="default")
 
+    # MCP command
+    subparsers.add_parser("mcp", help="Start MCP server")
+
     args = parser.parse_args()
 
     if args.command == "plan":
@@ -84,6 +91,8 @@ def main():
         learn_cmd(args)
     elif args.command == "wiki":
         wiki_ingest_cmd(args)
+    elif args.command == "mcp":
+        mcp_serve(args)
     else:
         parser.print_help()
 

@@ -32,20 +32,55 @@ class UberWiki:
         return file_path
 
     def search(self, query: str, project: Optional[str] = None) -> List[str]:
-        """Simple grep-based search across markdown files."""
-        results = []
+        """Hybrid search: llmwiki (semantic) -> grep (fallback)."""
         search_path = self.root / (project if project else "")
         
+        # 1. Try llmwiki (Rust binary for semantic/BM25)
+        if self._is_llmwiki_available():
+            try:
+                cmd = ["llmwiki", "search", query, "--wiki-root", str(search_path)]
+                output = subprocess.check_output(cmd).decode()
+                # Parse llmwiki output format
+                return self._parse_llmwiki(output)
+            except Exception:
+                pass
+
+        # 2. Fallback: Python grep-based ranking
+        results = []
         try:
-            # Recursive grep for query in .md files
             cmd = ["grep", "-ril", query, str(search_path)]
-            output = subprocess.check_output(cmd).decode().splitlines()
-            for path in output[:3]: # Top 3 results
-                results.append(Path(path).read_text())
+            files = subprocess.check_output(cmd).decode().splitlines()
+            for path in files[:5]: # Top 5 files
+                content = Path(path).read_text()
+                # Extract 200-char dense snippet around match
+                snippet = self._extract_snippet(content, query)
+                results.append(f"[{Path(path).name}] {snippet}")
         except subprocess.CalledProcessError:
             pass
             
         return results
+
+    def _is_llmwiki_available(self) -> bool:
+        from shutil import which
+        return which("llmwiki") is not None
+
+    def _parse_llmwiki(self, output: str) -> List[str]:
+        """Convert llmwiki stdout to dense context blocks."""
+        # Simple extraction of paths and snippets
+        lines = output.splitlines()
+        results = []
+        for line in lines:
+            if line.startswith("[") and "]" in line:
+                results.append(line.strip())
+        return results[:3]
+
+    def _extract_snippet(self, content: str, query: str) -> str:
+        """Find query in text and return context window."""
+        idx = content.lower().find(query.lower())
+        if idx == -1: return content[:200]
+        start = max(0, idx - 100)
+        end = min(len(content), idx + 100)
+        return "..." + content[start:end].replace("\n", " ") + "..."
 
     def sync(self, remote: Optional[str] = None):
         """Version control the knowledge base."""

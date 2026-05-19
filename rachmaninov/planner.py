@@ -23,6 +23,9 @@ class RachmaninovPlanner:
         self.wiki = UberWiki()
 
     async def propose_actions(self, goals: List[dict], user_context: str) -> List[Dict[str, Any]]:
+        # 0. Learn new entities from context
+        self.personal.learn_from_context(user_context)
+
         # 1. Map command to personal entities
         personal_matches = self.personal.map_command(user_context)
         personal_context = ", ".join([f"{e.name} ({e.category})" for e in personal_matches]) or "None"
