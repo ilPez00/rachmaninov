@@ -73,3 +73,13 @@ class ExperienceLog:
     economicScore: float = 0.0
     intellectualScore: float = 0.0
     psychologicalScore: float = 0.0
+
+@dataclass
+class Dream:
+    id: str
+    type: str           # SIMULATION, VARIATION, CROSS_POLLINATION
+    source_goal_id: str
+    content: str        # The "dreamed" variation text
+    timestamp: str
+    dismissed: bool = False
+    metadata: Dict[str, Any] = field(default_factory=dict)

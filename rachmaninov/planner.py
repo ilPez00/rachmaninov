@@ -5,12 +5,14 @@ from typing import List, Dict, Any
 from .ontology import resolve_domain, enrich_goals_prompt
 from .ontology_personal import PersonalOntology
 from .wiki import UberWiki
+from .dream import RachmaninovDreamEngine
 from .models import ProposedAction
 
 SYSTEM_PROMPT = """You are Rachmaninov — action-proposal engine. 
 Global Ontology: {goals_context}
 Personal Ontology (User Symbols): {personal_context}
 Relevant History (UberWiki): {wiki_context}
+Dream Variations: {dream_context}
 
 Current User Context: {user_context}
 
@@ -21,6 +23,7 @@ class RachmaninovPlanner:
         self.model = model
         self.personal = PersonalOntology()
         self.wiki = UberWiki()
+        self.dream_engine = RachmaninovDreamEngine()
 
     async def propose_actions(self, goals: List[dict], user_context: str) -> List[Dict[str, Any]]:
         # 0. Learn new entities from context
@@ -35,11 +38,15 @@ class RachmaninovPlanner:
         wiki_results = self.wiki.search(user_context, project=project_hint)
         wiki_context = "\n---\n".join(wiki_results) or "No relevant history."
 
+        # 3. Load active dream proposals
+        dream_context = self.dream_engine.build_context_block()
+
         goals_context = enrich_goals_prompt(goals)
         prompt = SYSTEM_PROMPT.format(
             goals_context=goals_context, 
             personal_context=personal_context,
-            wiki_context=wiki_context[:1000], # Cap history size
+            wiki_context=wiki_context[:1000],
+            dream_context=dream_context,
             user_context=user_context
         )
         

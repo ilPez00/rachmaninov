@@ -1,0 +1,14 @@
+{
+  "README.md": "c301aede57abf84314537491e895ab01",
+  "goals.json": "54053afcba61b8f8bfe213e6b35f3188",
+  "pyproject.toml": "b639a620efef5c98f7eb708667a16385",
+  "rachmaninov/__init__.py": "6778a56a24639d330f68f92770a2bc68",
+  "rachmaninov/actor.py": "cf0159ccf5ee564929a14eeb2684d39a",
+  "rachmaninov/cli.py": "0e69577f8feb7a03164b78b0ea395323",
+  "rachmaninov/mcp.py": "50481c44f6c93c427efaa9161bb3d1f6",
+  "rachmaninov/models.py": "0dc10ad4efe71e7c55ac3cfbc9194c43",
+  "rachmaninov/ontology.py": "133b5914b043f9555a6c193818a296ec",
+  "rachmaninov/ontology_personal.py": "969c208a56cb46405d407343d4ae8952",
+  "rachmaninov/planner.py": "16b27d13ce2b8173eb01b07d8bfd0a2e",
+  "rachmaninov/wiki.py": "935f8ccfb47da222f940c341178fefeb"
+}

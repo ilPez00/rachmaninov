@@ -7,6 +7,8 @@ from .actor import RachmaninovActor
 from .ontology_personal import PersonalOntology
 from .wiki import UberWiki, WikiPage
 
+from .dream import RachmaninovDreamEngine
+
 async def plan_cmd(args):
     planner = RachmaninovPlanner()
     try:
@@ -20,7 +22,24 @@ async def plan_cmd(args):
     proposals = await planner.propose_actions(goals, context)
     print(json.dumps(proposals, indent=2))
 
+async def dream_cmd(args):
+    engine = RachmaninovDreamEngine()
+    try:
+        with open(args.goals, "r") as f:
+            goals = json.load(f)
+    except Exception as e:
+        print(f"Error loading goals: {e}")
+        return
+
+    print("[*] Dreaming variations for stalled goals...")
+    dreams = await engine.generate_dreams(goals)
+    if not dreams:
+        print("[!] No stalled goals found or no dreams generated.")
+    for d in dreams:
+        print(f"[{d.type}] For {d.source_goal_id}: {d.content}")
+
 def act_cmd(args):
+    # ... existing
     actor = RachmaninovActor()
     scores = {
         "physical": args.physical,
@@ -66,6 +85,10 @@ def main():
     p_act.add_argument("--intellectual", type=float, default=0.0)
     p_act.add_argument("--psychological", type=float, default=0.0)
 
+    # Dream command
+    p_dream = subparsers.add_parser("dream", help="Generate variations for stalled goals")
+    p_dream.add_argument("--goals", required=True, help="Path to goals.json")
+
     # Learn command
     p_learn = subparsers.add_parser("learn", help="Learn personal entity")
     p_learn.add_argument("--name", required=True)
@@ -87,6 +110,8 @@ def main():
         asyncio.run(plan_cmd(args))
     elif args.command == "act":
         act_cmd(args)
+    elif args.command == "dream":
+        asyncio.run(dream_cmd(args))
     elif args.command == "learn":
         learn_cmd(args)
     elif args.command == "wiki":
