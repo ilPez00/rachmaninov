@@ -1,15 +1,25 @@
-# 🏛️ Philosophical Foundations: The Rachmaninov Engine
+# 🏛️ Philosophical Foundations: The Ayu Ecosystem
 
-> "Man is something that shall be overcome." — Friedrich Nietzsche
+> "The world is the totality of facts, not of things." — Ludwig Wittgenstein
 
-The Rachmaninov Engine is not a productivity tool; it is a **cybernetic framework for the Will**. It bridges the gap between high-level human intent (**Will**) and low-level digital execution (**Language**) using an ontological bridge.
+Ayu is a cybernetic framework for **Total Coordination**. It is designed to maximize the "Luck Surface Area" and "Decision Superiority" of the sovereign individual.
 
 ---
 
-## 1. The Ontological Bridge (Plato & Aristotle)
-The engine utilizes a **deterministic ontology** (Body, Wealth, Mind, Impact) to map chaotic human activity into a structured schema of "Ideal Forms."
-*   **Platonic Realism:** User goals are mapped to a canonical life-domain structure, ensuring that diverse data (biometrics, notes, code) is categorized by its essential nature.
-*   **Aristotelian Logic:** The `ayu` action schema (FABRICATE, STUDY, CONSTRUCT, BOND, HEAL) provides a categorical framework for evaluating the "Golden Mean" of daily activity—balancing intensity with recovery.
+## 1. Total Command (Lattice Architecture)
+Inspired by decentralized defense systems, the **Lattice** treats every device as a sensor or an effector. 
+*   **Decentralized Will:** Command is centralized in the user's intent, but execution is distributed across the network of agents and machines.
+*   **The Integrated Battle-space:** Your life is not a series of apps; it is a single field of action.
+
+## 2. Ontological Realism (Rachmaninov)
+Rachmaninov functions as the system's "Foundry." It rejects the vagueness of raw LLM outputs in favor of a **Deterministic Ontology**.
+*   **Platonic Idealism:** Mapping the flux of reality to stable, actionable entities.
+*   **Truth-Mapping:** By defining the properties of every action, the user moves from "guessing" to "commanding."
+
+## 3. The Architecture of Dreams (UberWiki)
+The Wiki is the engine's cognitive sub-basement.
+*   **Context Segmentation:** We do not load everything because the mind does not load everything. We segment context to maintain token-efficiency and focus.
+*   **Simulated Futures:** Dreaming is the process of generating variations for every point in the ontology. It is the machine-assisted practice of *Premeditatio Malorum* (Stoic negative visualization) and future-path optimization.
 
 ## 2. The Will to Meaning (Viktor Frankl)
 The **PDCA (Plan-Do-Check-Act)** loop is the engine's core survival mechanism.
