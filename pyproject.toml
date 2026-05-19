@@ -9,7 +9,7 @@ description = "Standalone action-proposal and PDCA engine based on Praxis ontolo
 readme = "README.md"
 requires-python = ">=3.8"
 dependencies = [
-    # No external deps yet, interfaces with 'opencode' CLI
+    "PyYAML",
 ]
 
 [project.scripts]

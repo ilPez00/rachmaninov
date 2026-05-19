@@ -4,8 +4,10 @@ import json
 import argparse
 from .planner import RachmaninovPlanner
 from .actor import RachmaninovActor
+from .ontology_personal import PersonalOntology
+from .wiki import UberWiki, WikiPage
 
-async def plan(args):
+async def plan_cmd(args):
     planner = RachmaninovPlanner()
     try:
         with open(args.goals, "r") as f:
@@ -18,7 +20,7 @@ async def plan(args):
     proposals = await planner.propose_actions(goals, context)
     print(json.dumps(proposals, indent=2))
 
-def act(args):
+def act_cmd(args):
     actor = RachmaninovActor()
     scores = {
         "physical": args.physical,
@@ -28,6 +30,17 @@ def act(args):
     }
     actor.record_action(args.goal_id, args.text, args.grade, args.rationale, scores)
     print("Action recorded successfully.")
+
+def learn_cmd(args):
+    po = PersonalOntology()
+    po.learn_entity(args.name, args.category, args.description)
+    print(f"Learned entity: {args.name}")
+
+def wiki_ingest_cmd(args):
+    wiki = UberWiki()
+    page = WikiPage(path="", title=args.title, content=args.content, project=args.project)
+    wiki.ingest(page)
+    print("Ingested into UberWiki.")
 
 def main():
     parser = argparse.ArgumentParser(description="Rachmaninov Standalone Tool")
@@ -49,12 +62,28 @@ def main():
     p_act.add_argument("--intellectual", type=float, default=0.0)
     p_act.add_argument("--psychological", type=float, default=0.0)
 
+    # Learn command
+    p_learn = subparsers.add_parser("learn", help="Learn personal entity")
+    p_learn.add_argument("--name", required=True)
+    p_learn.add_argument("--category", choices=["Project", "Person", "Tool", "Concept"], required=True)
+    p_learn.add_argument("--description", default="")
+
+    # Wiki command
+    p_wiki = subparsers.add_parser("wiki", help="Manage UberWiki")
+    p_wiki.add_argument("--title", required=True)
+    p_wiki.add_argument("--content", required=True)
+    p_wiki.add_argument("--project", default="default")
+
     args = parser.parse_args()
 
     if args.command == "plan":
-        asyncio.run(plan(args))
+        asyncio.run(plan_cmd(args))
     elif args.command == "act":
-        act(args)
+        act_cmd(args)
+    elif args.command == "learn":
+        learn_cmd(args)
+    elif args.command == "wiki":
+        wiki_ingest_cmd(args)
     else:
         parser.print_help()
 

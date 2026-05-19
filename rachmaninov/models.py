@@ -43,17 +43,17 @@ class ProposedAction:
     progress: float = 0.0
 
 @dataclass
-class ExperienceLog:
-    desire: str
-    intent: str = ""
-    method: str = ""
-    action: str = ""
-    effectSummary: str = ""
-    effectDetails: str = ""
-    outcome: str = ""
-    relatedResources: List[str] = field(default_factory=list)
-    symbolicAssociations: Dict[str, str] = field(default_factory=dict)
-    physicalScore: float = 0.0
-    economicScore: float = 0.0
-    intellectualScore: float = 0.0
-    psychologicalScore: float = 0.0
+class PersonalEntity:
+    name: str
+    category: str  # Project, Person, Tool, Concept
+    description: str = ""
+    associations: List[str] = field(default_factory=list)
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+@dataclass
+class WikiPage:
+    path: str
+    title: str
+    content: str
+    frontmatter: Dict[str, Any] = field(default_factory=dict)
+    project: str = "default"

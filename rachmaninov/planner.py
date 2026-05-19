@@ -3,35 +3,42 @@ import subprocess
 import json
 from typing import List, Dict, Any
 from .ontology import resolve_domain, enrich_goals_prompt
+from .ontology_personal import PersonalOntology
+from .wiki import UberWiki
 from .models import ProposedAction
 
-SYSTEM_PROMPT = """You are Rachmaninov — action-proposal engine. Not an assistant.
-Your task is to take a user's goals and context, then propose specific, high-impact actions for the day.
+SYSTEM_PROMPT = """You are Rachmaninov — action-proposal engine. 
+Global Ontology: {goals_context}
+Personal Ontology (User Symbols): {personal_context}
+Relevant History (UberWiki): {wiki_context}
 
-Goals with ontology tags (domain/mode/scoreAxis already resolved — do NOT change them):
-{goals_context}
+Current User Context: {user_context}
 
-User Context:
-{user_context}
-
-Output ONLY a JSON array of proposed actions:
-[
-  {{
-    "id": "goal_id",
-    "action_text": "Specific action to take",
-    "duration_min": 30,
-    "scope": "SMALL/MEDIUM/LARGE"
-  }}
-]
-"""
+Output ONLY a JSON array of specific proposed actions."""
 
 class RachmaninovPlanner:
     def __init__(self, model: str = "opencode/deepseek-v4-flash-free"):
         self.model = model
+        self.personal = PersonalOntology()
+        self.wiki = UberWiki()
 
     async def propose_actions(self, goals: List[dict], user_context: str) -> List[Dict[str, Any]]:
+        # 1. Map command to personal entities
+        personal_matches = self.personal.map_command(user_context)
+        personal_context = ", ".join([f"{e.name} ({e.category})" for e in personal_matches]) or "None"
+        
+        # 2. Search UberWiki for project-specific data
+        project_hint = next((e.name for e in personal_matches if e.category == "Project"), None)
+        wiki_results = self.wiki.search(user_context, project=project_hint)
+        wiki_context = "\n---\n".join(wiki_results) or "No relevant history."
+
         goals_context = enrich_goals_prompt(goals)
-        prompt = SYSTEM_PROMPT.format(goals_context=goals_context, user_context=user_context)
+        prompt = SYSTEM_PROMPT.format(
+            goals_context=goals_context, 
+            personal_context=personal_context,
+            wiki_context=wiki_context[:1000], # Cap history size
+            user_context=user_context
+        )
         
         cmd = [
             "opencode", "run",
